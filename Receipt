@@ -1,0 +1,43 @@
+package com.company;
+
+public class Receipt {
+    private String cust_name;
+    private String item_list;
+    private double bill_total;
+
+    public Receipt(String cust_name, String item_list, double bill_total) {
+        this.cust_name = cust_name;
+        this.item_list = item_list;
+        this.bill_total = bill_total;
+    }
+
+    public String printReceipts(){
+        String output = "";
+        output += getCust_name() + getItem_list() + "\n" + "Bill total: " + String.format("%.2f",getBill_total());
+        return output;
+    }
+
+    public String getCust_name() {
+        return cust_name;
+    }
+
+    public void setCust_name(String cust_name) {
+        this.cust_name = cust_name;
+    }
+
+    public String getItem_list() {
+        return item_list;
+    }
+
+    public void setItem_list(String item_list) {
+        this.item_list = item_list;
+    }
+
+    public double getBill_total() {
+        return bill_total;
+    }
+
+    public void setBill_total(double bill_total) {
+        this.bill_total = bill_total;
+    }
+}
