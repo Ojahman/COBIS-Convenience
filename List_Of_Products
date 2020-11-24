@@ -4,9 +4,14 @@ import java.util.ArrayList;
 
 public class List_Of_Products {
     private ArrayList<Product> product_list = new ArrayList<Product>();
+    private ArrayList<Product> closing_list = new ArrayList<Product>();
 
     public void addProduct(Product newproduct){
         product_list.add(newproduct);
+    }
+
+    public void addtoClose(Product newproduct){
+        closing_list.add(newproduct);
     }
 
     public String printInventory(){
@@ -21,10 +26,20 @@ public class List_Of_Products {
         String output = "";
         for (int i = 0; i < product_list.size(); i++) {
             if(product_list.get(i).getUnits()>0){
-                output += "\n" + product_list.get(i).getProduct_name() + " x" + product_list.get(i).getUnits() + " @ " + product_list.get(i).getPrice() + " each";
+                output += "\n" + product_list.get(i).getProduct_name() + " x " + product_list.get(i).getUnits() + " @ " + product_list.get(i).getPrice() + " each";
             }
         }
         return output;
+    }
+
+    public String printItems(){
+        String output = "";
+        for (int i = 0; i < product_list.size(); i++) {
+            if(product_list.get(i).getUnits()>0){
+                output += "\n" + product_list.get(i).getProduct_name() + " x " + product_list.get(i).getUnits();
+            }
+        }
+        return  output;
     }
 
     public double printBillTotal(){
@@ -35,10 +50,19 @@ public class List_Of_Products {
         return output;
     }
 
-    public Boolean inList(String purchase){
+    public Boolean inInventory(String purchase){
         Boolean output = false;
         for (int i = 0; i < product_list.size(); i++) {
             if (purchase.equals(product_list.get(i).getProduct_name())){
+                output = true;
+            }
+        }
+        return output;
+    }
+    public Boolean inCart(String purchase){
+        Boolean output = false;
+        for (int i = 0; i < product_list.size(); i++) {
+            if (purchase.equals(product_list.get(i).getProduct_name()) && product_list.get(i).getUnits()>0){
                 output = true;
             }
         }
@@ -59,11 +83,11 @@ public class List_Of_Products {
         this.product_list.get(index).setUnits(amount);
     }
 
-    public void copytoClosing (List_Of_Products current_cart, List_Of_Products closing_list){
-        for (int i = 0; i < current_cart.product_list.size(); i++) {
-            int units_to_add = current_cart.product_list.get(i).getUnits();
-            int starting_units = closing_list.product_list.get(i).getUnits();
-            closing_list.product_list.get(i).setUnits(starting_units + units_to_add);
+    public void updateClosing (List_Of_Products current_cart){
+        for (int i = 0; i < product_list.size(); i++) {
+            int units_to_add = product_list.get(i).getUnits();
+            int starting_units = closing_list.get(i).getUnits();
+            closing_list.get(i).setUnits(starting_units + units_to_add);
         }
     }
 
@@ -72,5 +96,22 @@ public class List_Of_Products {
             cart.product_list.get(i).setUnits(0);
         }
     }
-}
 
+    public String printInventorySold(){
+        String output = "";
+        for (int i = 0; i < closing_list.size(); i++) {
+            if(closing_list.get(i).getUnits()>0){
+                output += "\n" + closing_list.get(i).getProduct_name() + "(" + closing_list.get(i).getUnits() + ")";
+            }
+        }
+        return output;
+    }
+
+    public double printClosingTotal(){
+        double output = 0.00;
+        for (int i = 0; i < closing_list.size(); i++) {
+            output += (closing_list.get(i).getPrice()*closing_list.get(i).getUnits());
+        }
+        return output;
+    }
+}
