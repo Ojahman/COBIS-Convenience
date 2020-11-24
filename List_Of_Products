@@ -1,0 +1,76 @@
+package com.company;
+
+import java.util.ArrayList;
+
+public class List_Of_Products {
+    private ArrayList<Product> product_list = new ArrayList<Product>();
+
+    public void addProduct(Product newproduct){
+        product_list.add(newproduct);
+    }
+
+    public String printInventory(){
+        String output = "";
+        for (int i = 0; i < product_list.size(); i++) {
+            output += "\n" + product_list.get(i).getProduct_name();
+        }
+        return output;
+    }
+
+    public String printBill(){
+        String output = "";
+        for (int i = 0; i < product_list.size(); i++) {
+            if(product_list.get(i).getUnits()>0){
+                output += "\n" + product_list.get(i).getProduct_name() + " x" + product_list.get(i).getUnits() + " @ " + product_list.get(i).getPrice() + " each";
+            }
+        }
+        return output;
+    }
+
+    public double printBillTotal(){
+        double output = 0.00;
+        for (int i = 0; i < product_list.size(); i++) {
+            output += (product_list.get(i).getPrice()*product_list.get(i).getUnits());
+        }
+        return output;
+    }
+
+    public Boolean inList(String purchase){
+        Boolean output = false;
+        for (int i = 0; i < product_list.size(); i++) {
+            if (purchase.equals(product_list.get(i).getProduct_name())){
+                output = true;
+            }
+        }
+        return output;
+    }
+
+    public int indexNum(String productname) {
+        int output = 0;
+        for (int i = 0; i < product_list.size(); i++) {
+            if (product_list.get(i).getProduct_name().equals(productname)) {
+                output = i;
+            }
+        }
+        return output;
+    }
+
+    public void addUnits(int index, int amount) {
+        this.product_list.get(index).setUnits(amount);
+    }
+
+    public void copytoClosing (List_Of_Products current_cart, List_Of_Products closing_list){
+        for (int i = 0; i < current_cart.product_list.size(); i++) {
+            int units_to_add = current_cart.product_list.get(i).getUnits();
+            int starting_units = closing_list.product_list.get(i).getUnits();
+            closing_list.product_list.get(i).setUnits(starting_units + units_to_add);
+        }
+    }
+
+    public void emptyCart(List_Of_Products cart){
+        for (int i = 0; i < cart.product_list.size(); i++) {
+            cart.product_list.get(i).setUnits(0);
+        }
+    }
+}
+
