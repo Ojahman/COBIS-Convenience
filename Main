@@ -32,30 +32,40 @@ public class Main {
         Product dell_charger = new Product("Dell_Charger", 50.00, 0);
         cart.addProduct(dell_charger);
 
-        List_Of_Products day_closing_list= new List_Of_Products();
-        day_closing_list.addProduct(spicy_doritos);
-        day_closing_list.addProduct(cool_doritos);
-        day_closing_list.addProduct(coke);
-        day_closing_list.addProduct(diet_coke);
-        day_closing_list.addProduct(pepsi);
-        day_closing_list.addProduct(five_hour_energy);
-        day_closing_list.addProduct(sunflower_seeds);
-        day_closing_list.addProduct(peanuts);
-        day_closing_list.addProduct(macbook_charger);
-        day_closing_list.addProduct(dell_charger);
 
-        ArrayList<String> cust_list = new ArrayList<String>();
+        Product spicy_doritos1 = new Product("Red-Hot_Spicy_Doritos", 2.99, 0);
+        cart.addtoClose(spicy_doritos1);
+        Product cool_doritos1 = new Product("Cool_Ranch_Doritos", 2.99, 0);
+        cart.addtoClose(cool_doritos1);
+        Product coke1 = new Product("Coke", 0.99, 0);
+        cart.addtoClose(coke1);
+        Product diet_coke1 = new Product("Diet_Coke", 0.99, 0);
+        cart.addtoClose(diet_coke1);
+        Product pepsi1 = new Product("Pepsi", 0.99, 0);
+        cart.addtoClose(pepsi1);
+        Product five_hour_energy1 = new Product("Five_Hour_Energy", 3.99, 0);
+        cart.addtoClose(five_hour_energy1);
+        Product sunflower_seeds1 = new Product("Sunflower_Seeds", 0.99, 0);
+        cart.addtoClose(sunflower_seeds1);
+        Product peanuts1 = new Product("Peanuts", 0.99, 0);
+        cart.addtoClose(peanuts1);
+        Product macbook_charger1 = new Product("MacBook_Charger", 120.00, 0);
+        cart.addtoClose(macbook_charger1);
+        Product dell_charger1 = new Product("Dell_Charger", 50.00, 0);
+        cart.addtoClose(dell_charger1);
 
+        ArrayList<Receipt> closing_totals = new ArrayList<Receipt>();
+
+        System.out.print("These items are currently in stock:");
+        System.out.println(cart.printInventory());
         do {
             System.out.println("Commands: 1 - Add purchase, 2 - Change a purchase, 3 - End transaction, 4 - Close store");
             command = input.nextInt();
 
             if (command == 1) {
-                System.out.println("These items are currently in stock:");
-                System.out.println(cart.printInventory());
                 System.out.print("Enter the name of the product you want to purchase: ");
                 String purchase = input.next();
-                if(cart.inList(purchase)){
+                if(cart.inInventory(purchase)){
                     int index = cart.indexNum(purchase);
                     System.out.print("Enter the number of " + purchase + "(s) to buy: ");
                     int units = input.nextInt();
@@ -65,31 +75,42 @@ public class Main {
                     System.out.println("Sorry, your dream of " + purchase + " cannot come true today");
                 }
             } else if (command == 2) {
-                System.out.print("Enter the name of the product you want to remove change in your order: ");
+                System.out.print("Enter the name of the product you want to change in your order: ");
                 String purchase_to_change = input.next();
-                if(cart.inList(purchase_to_change)){
+                if(cart.inCart(purchase_to_change)){
                     int index = cart.indexNum(purchase_to_change);
                     System.out.print("Enter the new amount of " + purchase_to_change + "(s) for your order: ");
                     int new_units = input.nextInt();
                     cart.addUnits(index, new_units);
                     System.out.println(new_units + " " + purchase_to_change + "(s) now in your cart!");
+                } else {
                     System.out.println("Sorry, " + purchase_to_change + " is not in your cart");
                 }
             } else if (command == 3) {
                 System.out.print("Enter your name to display your bill: ");
-                System.out.println("Thank you for shopping with us! Time to pay for your dreams to come true.......");
                 String cust_name = input.next();
-                cust_list.add(cust_name);
+                String items = cart.printItems();
+                Double cust_total = cart.printBillTotal();
+                Receipt closing_receipt = new Receipt(cust_name, items, cust_total);
+                closing_totals.add(closing_receipt);
+                System.out.println("Thank you for shopping with us! Time to pay for your dreams to come true.......");
                 System.out.print(cust_name);
                 System.out.println(cart.printBill());
                 System.out.println("-------------------------------------------------");
-                System.out.println("Your total is: " + String.format("%.2f",cart.printBillTotal()));
-                cart.copytoClosing(cart, day_closing_list);
+                System.out.println("Your total is: " + String.format("%.2f",cust_total));
+                cart.updateClosing(cart);
                 cart.emptyCart(cart);
             }
 
         } while (command < 4);
-        System.out.println("Receipts ");
-
+        System.out.println("Receipts:");
+        for (int i = 0; i < closing_totals.size(); i++) {
+            System.out.print("("+ (i+1) + ") ");
+            System.out.println(closing_totals.get(i).printReceipts());
+            System.out.println();
+        }
+        System.out.print("Inventory Sold:");
+        System.out.println(cart.printInventorySold());
+        System.out.println("Grand Total: " + String.format("%.2f",cart.printClosingTotal()));
     }
 }
